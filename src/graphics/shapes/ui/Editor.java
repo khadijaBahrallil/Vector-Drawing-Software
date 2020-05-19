@@ -22,7 +22,6 @@ public class Editor extends JFrame
 	//Shape model;
 	private static SCollection model;
 	private ControlPanel controlPanel;
-	private ColorPanel colorPanel;
 	
 	public Editor()
 	{
@@ -38,7 +37,7 @@ public class Editor extends JFrame
 		
 		this.buildModel(); 
 		
-		// Affichage Modèle :
+		// Affichage Modï¿½le :
 		this.sview = new ShapesView(this.model);
 		this.sview.setPreferredSize(new Dimension(300,300));
 		this.getContentPane().add(this.sview, java.awt.BorderLayout.CENTER);
@@ -47,9 +46,7 @@ public class Editor extends JFrame
 		controlPanel = new ControlPanel();
 	    this.getContentPane().add(this.controlPanel, java.awt.BorderLayout.NORTH);
 	    
-	    // Affichage Menu :
-	    colorPanel = new ColorPanel();
-	 	this.getContentPane().add(this.colorPanel, java.awt.BorderLayout.EAST);
+	   
 	}
 
 	
