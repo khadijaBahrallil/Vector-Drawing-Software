@@ -6,13 +6,14 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 
 public class FontAttributes extends Attributes {
+	public static String id = "fontAttributes";
 	private Font font;
 	private Color color;
 	private FontMetrics fontMetrics;	
 	
 	public FontAttributes() {
 		// Utiliser le constructeur de Font
-		id = "fontAttributes";
+		
 		//font = new Font("Arial", 0, 0);
 		font = Font.decode("Helvetica");
 		color = Color.BLUE;
@@ -31,7 +32,7 @@ public class FontAttributes extends Attributes {
 		return id;
 	}
 	
-	// Méthode en plus par rapport au sujet
+	// Mï¿½thode en plus par rapport au sujet
 	public void setFontMetrics(FontMetrics fMetrics) {
 		this.fontMetrics = fMetrics;
 	}

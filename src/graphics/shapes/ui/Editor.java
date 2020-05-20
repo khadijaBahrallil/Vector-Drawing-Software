@@ -43,7 +43,7 @@ public class Editor extends JFrame
 		this.getContentPane().add(this.sview, java.awt.BorderLayout.CENTER);
 		
 	    // Affichage Menu :
-		controlPanel = new ControlPanel();
+		controlPanel = new ControlPanel(sview);
 	    this.getContentPane().add(this.controlPanel, java.awt.BorderLayout.NORTH);
 	    
 	   

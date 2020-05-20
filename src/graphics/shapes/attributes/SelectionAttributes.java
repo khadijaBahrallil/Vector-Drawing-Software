@@ -1,10 +1,11 @@
 package graphics.shapes.attributes;
 
 public class SelectionAttributes extends Attributes {
+	public static String id = "selectionAttributes";
 	private boolean selected;
 	
 	public SelectionAttributes() {
-		id = "selectionAttributes";
+		
 		selected = false;
 	}
 	

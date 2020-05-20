@@ -8,19 +8,21 @@ import java.util.Iterator;
 import graphics.shapes.SCollection;
 import graphics.shapes.Shape;
 import graphics.shapes.attributes.SelectionAttributes;
+import graphics.shapes.save.FileVisitor;
 import graphics.ui.Controller;
 
 public class ShapesController extends Controller {
-	// Implémente donc les Listeners via Controller	
+	// Implï¿½mente donc les Listeners via Controller	
 	private Shape target;
 	private Point mouseStart;
+	private FileVisitor strategy;
 	
 	public ShapesController(Object newModel) {
 		super(newModel);
 		this.target = null;
 	}
 	
-	// Méthodes	
+	// Mï¿½thodes	
 	private Shape getTarget() {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection)model).iterator();
@@ -115,5 +117,15 @@ public class ShapesController extends Controller {
 			mouseStart.setLocation(evt.getX(),evt.getY());
 			this.getView().repaint();		
 		}
+	}
+	
+
+
+
+	public void save(FileVisitor fileStrat) {
+		this.strategy = fileStrat;
+		this.strategy.visitCollection((SCollection) this.getModel());
+		
+		
 	}
 }
