@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.Iterator;
 
 import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
+import graphics.shapes.SPath;
+import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
 import graphics.shapes.Shape;
@@ -149,6 +152,44 @@ public class ShapeDraftman implements ShapeVisitor {
 			}
 						
 		}
+	}
+
+	@Override
+	public void visitPass(SPath pass) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitPolygon(SPolygon poly) {
+		if (poly != null) {
+			Polygon polygon = new Polygon();
+			for(Point point : poly.getPoints()) {
+				polygon.addPoint((int)point.getX(),(int)point.getY());
+			}
+			
+			ColorAttributes cA = (ColorAttributes) poly.getAttributes("colorAttributes");
+			if (cA != null) {
+				if (cA.filled()) {
+					g.setColor(cA.filledColor());
+					g.fillPolygon(polygon);
+				}
+				if (cA.stroked()) {
+					g.setColor(cA.strokedColor());
+					g.drawPolygon(polygon);
+				}			
+			}
+			else {
+				g.setColor(Color.BLACK);
+				g.fillPolygon(polygon);
+			}
+			
+			SelectionAttributes sA = (SelectionAttributes) poly.getAttributes("selectionAttributes");
+			if (sA != null && sA.isSelected()) {
+				drawSelectionShape(poly.getBounds());			
+			}
+		}	
+		
 	}
 	
 }
