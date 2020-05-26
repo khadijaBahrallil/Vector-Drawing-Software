@@ -11,6 +11,7 @@ import graphics.shapes.attributes.SelectionAttributes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.FileNotFoundException;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -23,7 +24,7 @@ public class Editor extends JFrame
 	private static SCollection model;
 	private ControlPanel controlPanel;
 	
-	public Editor()
+	public Editor() throws FileNotFoundException
 	{
 		super("Shapes Editor");
 
@@ -47,6 +48,32 @@ public class Editor extends JFrame
 	    this.getContentPane().add(this.controlPanel, java.awt.BorderLayout.NORTH);
 	    
 	   
+	}
+	
+	public Editor(SCollection model) {
+		super("Shapes Editor");
+
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(java.awt.event.WindowEvent evt) {
+				System.exit(0);
+			}
+		});
+
+		this.buildModel();
+
+		// Affichage Modele :
+		this.sview = new ShapesView(model);
+		this.sview.setPreferredSize(new Dimension(300, 300));
+		this.getContentPane().add(this.sview, java.awt.BorderLayout.CENTER);
+
+		// Affichage Menu Principal :
+		try {
+			controlPanel = new ControlPanel(this.sview);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//this.setJMenuBar(controlPanel.getMenuBar());
 	}
 
 	
@@ -90,8 +117,16 @@ public class Editor extends JFrame
 	
 	public static void main(String[] args)
 	{
-		Editor self = new Editor();
-		self.pack();
-		self.setVisible(true);
+		
+		try {
+			Editor self;
+			self = new Editor();
+			self.pack();
+			self.setVisible(true);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

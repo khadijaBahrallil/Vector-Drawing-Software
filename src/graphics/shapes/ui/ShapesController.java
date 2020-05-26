@@ -12,17 +12,15 @@ import graphics.shapes.save.FileVisitor;
 import graphics.ui.Controller;
 
 public class ShapesController extends Controller {
-	// Impl�mente donc les Listeners via Controller	
+	
 	private Shape target;
 	private Point mouseStart;
-	private FileVisitor strategy;
 	
 	public ShapesController(Object newModel) {
 		super(newModel);
 		this.target = null;
 	}
 	
-	// M�thodes	
 	private Shape getTarget() {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection)model).iterator();
@@ -95,8 +93,7 @@ public class ShapesController extends Controller {
 		this.getView().repaint();
 	}
 	
-	public void mouseDragged(MouseEvent evt)
-	{
+	public void mouseDragged(MouseEvent evt) {
 		Shape shape = null;	
 		boolean containsSelected = false;
 		Iterator<Shape> itr = ((SCollection)model).iterator();
@@ -122,10 +119,5 @@ public class ShapesController extends Controller {
 
 
 
-	public void save(FileVisitor fileStrat) {
-		this.strategy = fileStrat;
-		this.strategy.visitCollection((SCollection) this.getModel());
-		
-		
-	}
+	
 }

@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,41 +17,109 @@ import graphics.shapes.SText;
 import graphics.shapes.attributes.ColorAttributes;
 import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
+import graphics.shapes.save.Reader;
+import graphics.shapes.save.SVGVisitor;
+import graphics.shapes.save.Writer;
+import graphics.shapes.save.XMLReader;
 import graphics.shapes.save.XMLVisitor;
 
 @SuppressWarnings("serial")
 public class ControlPanel extends JMenuBar {
 	private JMenu menuShape;
 	private JMenu menuFile;
-	private SCollection model;
-	private ShapesController shapesController;
+	private JMenu menuSave;
+	private JMenu menuOpen;
 	
-	public ControlPanel(ShapesView sview) {
+	private SCollection model;
+	private Writer writer;
+	private Reader reader;
+	
+	public ControlPanel(ShapesView sview) throws FileNotFoundException {
 		this.model = Editor.getModel();
 		
-		this.shapesController = (ShapesController) sview.getController();
 
 		
 		
 		
 		menuFile = new JMenu(" Fichier ");
-		JMenuItem msave = new JMenuItem(" Enregistrer ");
-		msave.addActionListener(new ActionListener() {
+		menuSave = new JMenu(" Enregistrer ");
+		
+		JMenuItem saveXml = new JMenuItem(" XML ");
+		saveXml.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				PrintWriter o;
+				
 				try {
-					o = new PrintWriter(new BufferedOutputStream(new FileOutputStream("Files/file.xml")),
-							true);
-					shapesController.save(XMLVisitor.GetInstance(o));
+					writer = new Writer(sview);
+					writer.write(new XMLVisitor(writer.getWriter()));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
 				
+				
 			}			
 		});
 		
-		menuFile.add(msave);
+		menuSave.add(saveXml);
+		
+		JMenuItem saveSVG = new JMenuItem(" SVG ");
+		saveSVG.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					writer = new Writer(sview);
+					writer.write(new SVGVisitor(writer.getWriter()));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				
+			}			
+		});
+		
+		menuSave.add(saveSVG);
+		
+		menuFile.add(menuSave);
+		
+		
+menuOpen = new JMenu(" Ouvrir ");
+		
+		JMenuItem openXml = new JMenuItem(" XML ");
+		openXml.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				reader = new Reader();
+				reader.read(new XMLReader());
+				
+				
+			}			
+		});
+		
+		menuOpen.add(openXml);
+		
+		JMenuItem openSVG = new JMenuItem(" SVG ");
+		openSVG.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				
+			}			
+		});
+		
+		menuOpen.add(openSVG);
+		
+		menuFile.add(menuOpen);
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		this.add(menuFile);
 		menuShape = new JMenu(" Nouvelle Forme ");		
