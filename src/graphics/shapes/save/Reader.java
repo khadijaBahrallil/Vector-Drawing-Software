@@ -1,6 +1,7 @@
 package graphics.shapes.save;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
@@ -22,10 +23,11 @@ public class Reader {
 	ReaderStrategy strat;
 	String file;
 	String path;
+	SCollection model;
 	
 	
 	public Reader() {
-		this.file = JOptionPane.showInputDialog("Enter file name : ");
+		//this.file = JOptionPane.showInputDialog("Enter file name : ");
 		this.path = "Files/";
 	}
 	
@@ -33,17 +35,16 @@ public class Reader {
 	public void read(ReaderStrategy strat) {
 		
 		this.strat = strat ;
-		//this.strat.parse(file);
 		
-		SCollection model = new SCollection();
+		model = new SCollection();
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		try {
 			final DocumentBuilder builder = factory.newDocumentBuilder();
 
-			this.file = JOptionPane.showInputDialog("Enter file name : ");
+			//this.file = JOptionPane.showInputDialog("Enter file name : ");
 
-			final Document document = builder.parse(new File(path + file + ".xml"));
+			final Document document = builder.parse(new File("Files/k.xml"));
 
 			final Element root = document.getDocumentElement();
 
@@ -64,9 +65,15 @@ public class Reader {
 			e.printStackTrace();
 		}
 
-		Editor self = new Editor(model);
-		self.pack();
-		self.setVisible(true);
+		try {
+			Editor self = new Editor(model);
+			self.pack();
+			self.setVisible(true);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 

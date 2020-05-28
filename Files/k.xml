@@ -1,0 +1,11 @@
+<shape>
+ <rectangle x="10" y="10" height="30" width="20" filled="true" stroked="false" filledColor="-16776961" strokedColor="0"/>
+ <circle x="100" y= "100" radius ="10" filled="false" stroked="true" filledColor="0" strokedColor="-16776961"/>
+ <text text="hello" x="101" y="49" filled="true" stroked="true" filledColor="-256" strokedColor="-16776961" />
+ <picture x="408" y="124" path="Files/ensisa.png"/>
+ <polygone np="5" X="[105, 205, 205, 155, 105, 200]" Y="[348, 348, 298, 278, 298, 250]" filled="true" stroked="true" filledColor="-65536" strokedColor="-16711936"/>
+<collection>
+ <rectangle x="20" y="30" height="30" width="30" filled="true" stroked="false" filledColor="-65281" strokedColor="0"/>
+ <circle x="150" y= "100" radius ="20" filled="false" stroked="true" filledColor="0" strokedColor="-12566464"/>
+</collection>
+</shape>

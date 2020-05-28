@@ -90,6 +90,7 @@ menuOpen = new JMenu(" Ouvrir ");
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				reader = new Reader();
+				
 				reader.read(new XMLReader());
 				
 				

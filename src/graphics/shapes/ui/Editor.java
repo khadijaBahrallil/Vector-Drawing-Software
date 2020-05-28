@@ -50,7 +50,7 @@ public class Editor extends JFrame
 	   
 	}
 	
-	public Editor(SCollection model) {
+	public Editor(SCollection model) throws FileNotFoundException {
 		super("Shapes Editor");
 
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -62,17 +62,13 @@ public class Editor extends JFrame
 		this.buildModel();
 
 		// Affichage Modele :
-		this.sview = new ShapesView(model);
+		this.sview = new ShapesView((Object) model);
 		this.sview.setPreferredSize(new Dimension(300, 300));
 		this.getContentPane().add(this.sview, java.awt.BorderLayout.CENTER);
 
 		// Affichage Menu Principal :
-		try {
 			controlPanel = new ControlPanel(this.sview);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			this.getContentPane().add(this.controlPanel, java.awt.BorderLayout.NORTH);
 		//this.setJMenuBar(controlPanel.getMenuBar());
 	}
 
