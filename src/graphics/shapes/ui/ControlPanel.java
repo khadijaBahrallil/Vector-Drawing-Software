@@ -141,7 +141,7 @@ public class ControlPanel extends JMenuBar {
 		});
 		menuShape.add(mPathLines);
 		
-		/*JMenuItem mPathInterpolation = new JMenuItem("Path Interpolation");
+		JMenuItem mPathInterpolation = new JMenuItem("Path Interpolation");
 		mPathInterpolation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -155,7 +155,7 @@ public class ControlPanel extends JMenuBar {
 				ShapesController.getView().repaint();
 			}	
 		});
-		menuShape.add(mPathInterpolation);*/
+		menuShape.add(mPathInterpolation);
 	}
 	
 	

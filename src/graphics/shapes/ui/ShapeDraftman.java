@@ -22,6 +22,14 @@ import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.PathAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.apache.commons.math3.fitting.PolynomialCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoint;
+import org.apache.commons.math3.fitting.WeightedObservedPoints;
+
 public class ShapeDraftman implements ShapeVisitor {
 	private Graphics g;
 	// private Shape shape;
@@ -152,53 +160,6 @@ public class ShapeDraftman implements ShapeVisitor {
 	}
 
 	@Override
-	public void visitPass(SPath pass) {
-		if (pass != null) {
-			PathAttributes pA = (PathAttributes) pass.getAttributes("pathAttributes");
-			ColorAttributes cA = (ColorAttributes) pass.getAttributes("colorAttributes");
-			if (pA != null) {
-
-				if (cA != null) {
-					if (cA.stroked()) {
-						g.setColor(cA.strokedColor());
-					}
-				} else {
-					g.setColor(Color.BLACK);
-				}
-
-				if (pA.getMethod().equals("Points")) {
-					for (Point p : pass.getPoints()) {
-						g.drawLine((int) p.getX(), (int) p.getY(), (int) p.getX(), (int) p.getY());
-					}
-				}
-				if (pA.getMethod().equals("Lines")) {
-					ArrayList<Point> points = pass.getPoints();
-					for (int i = 0; i < points.size()-1; i++) {
-						
-						g.drawLine((int) points.get(i).getX(), (int) points.get(i).getY(), (int) points.get(i+1).getX(), (int) points.get(i+1).getY());
-					}
-				}
-				/*if (pA.getMethod().equals("Interpolation")) {
-					ArrayList<Point> points = pass.getPoints();
-					for (int i = 0; i < points.size()-1; i++) {
-						System.out.println((int) points.get(i).getX());
-						System.out.println((int) points.get(i+1).getX());
-						int p = ((int) points.get(i+1).getY() - (int) points.get(i).getY()) / ((int) points.get(i+1).getX() - (int) points.get(i).getX());
-						int y = p * ((int) points.get(i+1).getX()- (int) points.get(i).getX()) + (int) points.get(i).getY();
-						g.drawLine((int) points.get(i).getX(), (int) points.get(i).getY(), (int) points.get(i+1).getX(), y);
-					}
-				}*/
-			}
-
-			SelectionAttributes sA = (SelectionAttributes) pass.getAttributes("selectionAttributes");
-			if (sA != null && sA.isSelected()) {
-				drawSelectionShape(pass.getBounds());
-			}
-		}
-
-	}
-
-	@Override
 	public void visitPolygon(SPolygon poly) {
 		if (poly != null) {
 			Polygon polygon = new Polygon();
@@ -224,6 +185,101 @@ public class ShapeDraftman implements ShapeVisitor {
 			SelectionAttributes sA = (SelectionAttributes) poly.getAttributes("selectionAttributes");
 			if (sA != null && sA.isSelected()) {
 				drawSelectionShape(poly.getBounds());
+			}
+		}
+
+	}
+
+	@Override
+	public void visitPath(SPath pass) {
+		if (pass != null) {
+			PathAttributes pA = (PathAttributes) pass.getAttributes("pathAttributes");
+			ColorAttributes cA = (ColorAttributes) pass.getAttributes("colorAttributes");
+			if (pA != null) {
+
+				if (cA != null) {
+					if (cA.stroked()) {
+						g.setColor(cA.strokedColor());
+					}
+				} else {
+					g.setColor(Color.BLACK);
+				}
+
+				if (pA.getMethod().equals("Points")) {
+					for (Point p : pass.getPoints()) {
+						g.drawLine((int) p.getX(), (int) p.getY(), (int) p.getX(), (int) p.getY());
+					}
+				}
+				if (pA.getMethod().equals("Lines")) {
+					ArrayList<Point> points = pass.getPoints();
+					for (int i = 0; i < points.size() - 1; i++) {
+
+						g.drawLine((int) points.get(i).getX(), (int) points.get(i).getY(),
+								(int) points.get(i + 1).getX(), (int) points.get(i + 1).getY());
+					}
+				}
+				if (pA.getMethod().equals("Interpolation")) {
+					ArrayList<Point> points = pass.getPoints();
+
+					ArrayList<Point> clear = new ArrayList<>();
+					System.out.println("avant");
+					if (points.size() > 100) {
+						System.out.println("apres");
+						clear.add(points.get(0));
+						for (int i = 1; i < points.size(); i++) {
+							if (points.get(i).getX() > points.get(i - 1).getX()) {
+								clear.add(points.get(i));
+							}
+						}
+						int size = 200;
+						double[] xs = new double[clear.size()];
+						double[] ys = new double[clear.size()];
+						ArrayList<WeightedObservedPoint> observations = new ArrayList<>();
+
+						/*for (int i = 0; i < clear.size(); i += size) {
+							if (i + size <= clear.size()) {
+								for (int j = i; j < i + size; j++) {
+									observations.add(
+											new WeightedObservedPoint(1.0, clear.get(j).getX(), clear.get(j).getY()));
+									xs[j % size] = clear.get(j).getX();
+								}
+								PolynomialCurveFitter function = PolynomialCurveFitter.create(3);
+
+								PolynomialFunction func = new PolynomialFunction(function.fit(observations));
+
+								for (int j = 0; j < size; j++) {
+									ys[j] = func.value(xs[j]);
+								}
+								for (int i1 = 0; i1 < size - 1; i1++) {
+									g.drawLine((int) xs[i1], (int) ys[i1], (int) xs[i1 + 1], (int) ys[i1 + 1]);
+								}
+							}
+						}*/
+
+						
+						 for (int i = 0; i < clear.size(); i++) { 
+							 observations.add(new WeightedObservedPoint(1.0, clear.get(i).getX(), clear.get(i).getY())); 
+							 xs[i]= clear.get(i).getX(); 
+						} 
+						 PolynomialCurveFitter function = PolynomialCurveFitter.create(3);
+						 
+						 PolynomialFunction func = new PolynomialFunction(function.fit(observations));
+						 
+						 for (int i = 0; i < xs.length; i++) { 
+							 ys[i] = func.value(xs[i]); 
+						} 
+						 for (int i= 0; i < xs.length - 1; i++) { 
+							 g.drawLine((int) xs[i], (int) ys[i], (int) xs[i + 1], (int) ys[i + 1]); 
+						} 
+						
+					}
+
+				}
+			}
+
+			SelectionAttributes sA = (SelectionAttributes) pass.getAttributes("selectionAttributes");
+			if (sA != null && sA.isSelected()) {
+				drawSelectionShape(pass.getBounds());
 			}
 		}
 

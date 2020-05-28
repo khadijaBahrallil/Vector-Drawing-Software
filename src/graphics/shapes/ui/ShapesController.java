@@ -74,9 +74,8 @@ public class ShapesController extends Controller {
 		mouseStart = new Point(e.getX(), e.getY());
 		try {
 			this.target = getTarget();
-		}
-		catch(IndexOutOfBoundsException e1) {
-			
+		} catch (IndexOutOfBoundsException e1) {
+
 		}
 		// selection de la forme?
 	}
@@ -124,9 +123,13 @@ public class ShapesController extends Controller {
 			this.getView().repaint();
 		}
 		if (draw != null) {
-			if (((PathAttributes) draw.getAttributes("pathAttributes")).getPenStatus().equals("IsDown")) {
-				draw.addPoint(new Point(evt.getX(), evt.getY()));
-				this.getView().repaint();
+			try {
+				if (((PathAttributes) draw.getAttributes("pathAttributes")).getPenStatus().equals("IsDown")) {
+					draw.addPoint(new Point(evt.getX(), evt.getY()));
+					this.getView().repaint();
+				}
+			} catch (NullPointerException e) {
+
 			}
 		}
 	}

@@ -8,6 +8,6 @@ public interface ShapeVisitor {
 	public void visitCircle(SCircle circle);
 	public void visitText(SText text);	
 	public void visitCollection(SCollection collec);
-	public void visitPass(SPath pass);
+	public void visitPath(SPath pass);
 	public void visitPolygon(SPolygon poly);
 }
