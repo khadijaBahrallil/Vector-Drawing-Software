@@ -222,7 +222,7 @@ public class ShapeDraftman implements ShapeVisitor {
 					ArrayList<Point> points = pass.getPoints();
 
 					ArrayList<Point> clear = new ArrayList<>();
-					if (points.size() > 100) {
+					if (points.size() > 2) {
 						clear.add(points.get(0));
 						for (int i = 1; i < points.size(); i++) {
 							if (points.get(i).getX() > points.get(i - 1).getX()) {
