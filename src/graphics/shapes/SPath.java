@@ -58,7 +58,7 @@ public class SPath extends Shape{
 	
 	@Override
 	public void accept(ShapeVisitor sVisitor) {
-		sVisitor.visitPass(this);		
+		sVisitor.visitPath(this);		
 	}
 
 	@Override
