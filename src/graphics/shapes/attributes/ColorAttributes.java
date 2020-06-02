@@ -3,14 +3,15 @@ package graphics.shapes.attributes;
 import java.awt.Color;
 
 public class ColorAttributes extends Attributes {
+	public static String id = "colorAttributes";
 	private boolean filled;
 	private boolean stroked;	
 	private Color filledColor;
 	private Color strokedColor;
 	
-	// Constructeur par défaut
+	// Constructeur par dï¿½faut
 	public ColorAttributes () {
-		id = "colorAttributes";
+		
 		this.filled = true;
 		this.stroked = true;
 		this.filledColor = Color.blue;
@@ -18,7 +19,7 @@ public class ColorAttributes extends Attributes {
 	}
 	
 	public ColorAttributes (boolean filled, boolean stroked, Color filledColor, Color strokedColor) {
-		id = "colorAttributes";
+		
 		this.filled = filled;
 		this.stroked = stroked;
 		this.filledColor = filledColor;

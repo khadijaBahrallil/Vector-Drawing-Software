@@ -2,7 +2,7 @@ package graphics.shapes;
 
 
 public interface ShapeVisitor {
-	// Ajouter les méthodes nouvelles
+	// Ajouter les mï¿½thodes nouvelles
 	
 	public void visitRectangle(SRectangle rect);
 	public void visitCircle(SCircle circle);
@@ -10,4 +10,5 @@ public interface ShapeVisitor {
 	public void visitCollection(SCollection collec);
 	public void visitPath(SPath pass);
 	public void visitPolygon(SPolygon poly);
+
 }
