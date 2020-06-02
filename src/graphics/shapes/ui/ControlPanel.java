@@ -4,10 +4,16 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
+import java.util.TreeMap;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 
 import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
@@ -15,6 +21,7 @@ import graphics.shapes.SPath;
 import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
+import graphics.shapes.animation.Animation;
 import graphics.shapes.attributes.ColorAttributes;
 import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.PathAttributes;
@@ -22,12 +29,30 @@ import graphics.shapes.attributes.SelectionAttributes;
 
 @SuppressWarnings("serial")
 public class ControlPanel extends JMenuBar {
+	private ShapesView shapesView;
+	private Map<String, Integer> speedMap;
 	private JMenu menuShape;
+	private JMenu menuAnim;
 	private SCollection model;
+	private Animation animation;
+	private boolean animationOn;
+	private String sText, path, speed, gridState;
+	private JMenuBar menuBar;
 	
-	public ControlPanel() {
+	public ControlPanel(ShapesView shapesView) {
+		this.shapesView = shapesView;
 		this.model = Editor.getModel();
-		menuShape = new JMenu("Nouvelle Forme");		
+		this.menuBar = new JMenuBar();
+		this.menuBar.setSize(this.shapesView.getWidth(), 100);
+		this.menuShape = new JMenu("Nouvelle Forme");		
+		this.menuAnim = new JMenu("Animation");	
+		this.animation = new Animation(model);
+		this.speedMap = new TreeMap<String, Integer>();
+		this.animationOn = false;
+		this.speed = "Normal";
+		this.speedMap.put("Slow", 18);
+		this.speedMap.put("Normal", 8);
+		this.speedMap.put("Fast", 2);
 		
 		JMenuItem mRectangle = new JMenuItem("Rectangle");
 		mRectangle.addActionListener(new ActionListener() {
@@ -156,6 +181,82 @@ public class ControlPanel extends JMenuBar {
 			}	
 		});
 		menuShape.add(mPathInterpolation);
+		
+		
+		
+		JMenuItem mStart = new JMenuItem(" Start ");
+		mStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// System.out.println("Lancement Anim : "+speed+" = "+speedMap.get(speed));
+				animation.animatedSelected(shapesView, speedMap.get(speed));
+				mStart.setEnabled(false);
+				animationOn = true;
+			}
+		});
+		mStart.setAccelerator(KeyStroke.getKeyStroke('a'));
+		menuAnim.add(mStart);
+
+		JMenuItem mStop = new JMenuItem(" Stop ");
+		mStop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				mStart.setEnabled(true);
+				// System.out.println("Stop Anim");
+				animation.getTimer().stop();
+				animationOn = false;
+			}
+		});
+		mStop.setAccelerator(KeyStroke.getKeyStroke('z'));
+		menuAnim.add(mStop);
+		menuAnim.addSeparator();
+
+		JMenu mSpeed = new JMenu(" Speed ");
+		JRadioButtonMenuItem mSlow = new JRadioButtonMenuItem("Slow");
+		JRadioButtonMenuItem mNormal = new JRadioButtonMenuItem("Normal");
+		JRadioButtonMenuItem mFast = new JRadioButtonMenuItem("Fast");
+		JLabel speedInfo = new JLabel("   (Normal)");
+
+		ButtonGroup bgSpeed = new ButtonGroup();
+		bgSpeed.add(mSlow);
+		bgSpeed.add(mNormal);
+		bgSpeed.add(mFast);
+
+		class SpeedListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				speed = ((JRadioButtonMenuItem) e.getSource()).getText();
+				speedInfo.setText("   (" + ((JRadioButtonMenuItem) e.getSource()).getText() + ")");
+				
+				// Restart Animation to take the new speed account
+				if (animationOn) {
+					animation.getTimer().stop();
+					animation.animatedSelected(shapesView, speedMap.get(speed));
+				}
+			}
+		}
+
+		SpeedListener speedLis = new SpeedListener();
+		mSlow.addActionListener(speedLis);
+		mSlow.setAccelerator(KeyStroke.getKeyStroke('1'));
+		mNormal.addActionListener(speedLis);
+		mNormal.setAccelerator(KeyStroke.getKeyStroke('2'));
+		mFast.addActionListener(speedLis);
+		mFast.setAccelerator(KeyStroke.getKeyStroke('3'));
+		mFast.addActionListener(speedLis);
+		mSpeed.add(mSlow);
+		mSpeed.add(mNormal);
+		mSpeed.add(mFast);
+		mNormal.setSelected(true);
+		menuAnim.add(mSpeed);
+		menuAnim.add(speedInfo);
+		
+		menuBar.add(menuAnim);
+		menuBar.add(menuShape);
+	}
+	
+	public JMenuBar getMenuBar() {
+		return this.menuBar;
 	}
 	
 	
