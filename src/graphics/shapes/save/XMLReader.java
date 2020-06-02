@@ -27,6 +27,7 @@ public class XMLReader extends ReaderStrategy {
 		String type = shape.getNodeName();
 
 		if (type == "rectangle") {
+			
 
 			int x = Integer.parseInt(shape.getAttribute("x"));
 			int y = Integer.parseInt(shape.getAttribute("y"));
@@ -34,10 +35,10 @@ public class XMLReader extends ReaderStrategy {
 			int width = Integer.parseInt(shape.getAttribute("width"));
 			SRectangle r = new SRectangle(new Point(x, y), width, height);
 
-			boolean filled = Boolean.parseBoolean(shape.getAttribute("filled"));
-			boolean stroked = Boolean.parseBoolean(shape.getAttribute("stroked"));
-			Color filledColor = Color.decode(shape.getAttribute("filledColor"));
-			Color strokedColor = Color.decode(shape.getAttribute("strokedColor"));
+			boolean filled = Boolean.parseBoolean(shape.getAttribute("isfilled"));
+			boolean stroked = Boolean.parseBoolean(shape.getAttribute("isstroked"));
+			Color filledColor = Color.decode(shape.getAttribute("filled"));
+			Color strokedColor = Color.decode(shape.getAttribute("stroked"));
 
 			r.addAttributes(new ColorAttributes(filled, stroked, filledColor, strokedColor));
 			r.addAttributes(new SelectionAttributes());
@@ -55,10 +56,10 @@ public class XMLReader extends ReaderStrategy {
 
 			SCircle c = new SCircle(new Point(x, y), radius);
 
-			boolean filled = Boolean.parseBoolean(shape.getAttribute("filled"));
-			boolean stroked = Boolean.parseBoolean(shape.getAttribute("stroked"));
-			Color filledColor = Color.decode(shape.getAttribute("filledColor"));
-			Color strokedColor = Color.decode(shape.getAttribute("strokedColor"));
+			boolean filled = Boolean.parseBoolean(shape.getAttribute("isfilled"));
+			boolean stroked = Boolean.parseBoolean(shape.getAttribute("isstroked"));
+			Color filledColor = Color.decode(shape.getAttribute("filled"));
+			Color strokedColor = Color.decode(shape.getAttribute("stroked"));
 			c.addAttributes(new ColorAttributes(filled, stroked, filledColor, strokedColor));
 			c.addAttributes(new SelectionAttributes());
 
@@ -80,13 +81,13 @@ public class XMLReader extends ReaderStrategy {
 
 			t.addAttributes(new FontAttributes());
 
-			boolean filled = Boolean.parseBoolean(shape.getAttribute("filled"));
+			boolean filled = Boolean.parseBoolean(shape.getAttribute("isfilled"));
 
-			boolean stroked = Boolean.parseBoolean(shape.getAttribute("stroked"));
+			boolean stroked = Boolean.parseBoolean(shape.getAttribute("isstroked"));
 
-			Color filledColor = Color.decode(shape.getAttribute("filledColor"));
+			Color filledColor = Color.decode(shape.getAttribute("filled"));
 
-			Color strokedColor = Color.decode(shape.getAttribute("strokedColor"));
+			Color strokedColor = Color.decode(shape.getAttribute("stroked"));
 
 			t.addAttributes(new ColorAttributes(filled, stroked, filledColor, strokedColor));
 			t.addAttributes(new FontAttributes());

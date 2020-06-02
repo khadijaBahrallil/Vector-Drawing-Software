@@ -19,34 +19,30 @@ import graphics.shapes.SCollection;
 import graphics.shapes.ui.Editor;
 
 public class Reader {
-	
+
 	ReaderStrategy strat;
 	String file;
 	String path;
 	SCollection model;
-	
-	
-	public Reader() {
-		//this.file = JOptionPane.showInputDialog("Enter file name : ");
+	DocumentBuilderFactory factory;
+	DocumentBuilder builder;
+	Document document;
+	Element root;
+
+	public Reader(String file) {
+		this.file = file;
 		this.path = "Files/";
 	}
-	
-	
+
 	public void read(ReaderStrategy strat) {
-		
-		this.strat = strat ;
-		
-		model = new SCollection();
-		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
 		try {
-			final DocumentBuilder builder = factory.newDocumentBuilder();
+			this.strat = strat;
 
-			//this.file = JOptionPane.showInputDialog("Enter file name : ");
-
-			final Document document = builder.parse(new File("Files/k.xml"));
-
-			final Element root = document.getDocumentElement();
+			model = new SCollection();
+			factory = DocumentBuilderFactory.newInstance();
+			builder = factory.newDocumentBuilder();
+			document = builder.parse(new File(path + file + ".xml"));
+			root = document.getDocumentElement();
 
 			final NodeList rootNodes = root.getChildNodes();
 			final int nbRootNodes = rootNodes.getLength();
@@ -54,9 +50,13 @@ public class Reader {
 			for (int i = 0; i < nbRootNodes; i++) {
 				if (rootNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
 					final Element shape = (Element) rootNodes.item(i);
-					model.add(this.strat.parse(shape));
+					this.model.add(this.strat.parse(shape));
 				}
 			}
+			System.out.println(model.toString());
+			Editor self = new Editor(model);
+			self.pack();
+			self.setVisible(true);
 		} catch (final ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (final SAXException e) {
@@ -65,16 +65,6 @@ public class Reader {
 			e.printStackTrace();
 		}
 
-		try {
-			Editor self = new Editor(model);
-			self.pack();
-			self.setVisible(true);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 	}
 
 }

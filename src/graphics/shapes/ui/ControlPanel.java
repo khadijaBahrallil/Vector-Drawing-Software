@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
@@ -18,6 +19,7 @@ import graphics.shapes.attributes.ColorAttributes;
 import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
 import graphics.shapes.save.Reader;
+import graphics.shapes.save.SVGReader;
 import graphics.shapes.save.SVGVisitor;
 import graphics.shapes.save.Writer;
 import graphics.shapes.save.XMLReader;
@@ -37,10 +39,6 @@ public class ControlPanel extends JMenuBar {
 	public ControlPanel(ShapesView sview) throws FileNotFoundException {
 		this.model = Editor.getModel();
 		
-
-		
-		
-		
 		menuFile = new JMenu(" Fichier ");
 		menuSave = new JMenu(" Enregistrer ");
 		
@@ -48,15 +46,12 @@ public class ControlPanel extends JMenuBar {
 		saveXml.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
 				try {
 					writer = new Writer(sview);
 					writer.write(new XMLVisitor(writer.getWriter()));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-				}
-				
-				
+				}	
 			}			
 		});
 		
@@ -89,7 +84,8 @@ menuOpen = new JMenu(" Ouvrir ");
 		openXml.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				reader = new Reader();
+				String file = JOptionPane.showInputDialog("Enter file name : ");
+				reader = new Reader(file);
 				
 				reader.read(new XMLReader());
 				
@@ -103,6 +99,11 @@ menuOpen = new JMenu(" Ouvrir ");
 		openSVG.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				String file = JOptionPane.showInputDialog("Enter file name : ");
+				reader = new Reader(file);
+				
+				reader.read(new SVGReader());
 				
 				
 				

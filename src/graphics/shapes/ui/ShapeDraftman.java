@@ -1,8 +1,10 @@
 package graphics.shapes.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
+import graphics.shapes.Selection;
 import graphics.shapes.Shape;
 import graphics.shapes.ShapeVisitor;
 import graphics.shapes.attributes.ColorAttributes;
@@ -18,14 +21,13 @@ import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
 
 public class ShapeDraftman implements ShapeVisitor {
-	private Graphics g;	
-	//private Shape shape;
+	private Graphics2D g;	
 
 	public ShapeDraftman(Graphics g) {
-		this.g = g;
+		this.g = (Graphics2D) g;
 	}	
 	
-	// Dessin du carré de Sélection
+	// Dessin du carrï¿½ de Sï¿½lection
 	public void drawSelectionShape(Rectangle rect) {
 		final int size = 5;
 		g.setColor(Color.black);
@@ -149,6 +151,14 @@ public class ShapeDraftman implements ShapeVisitor {
 			}
 						
 		}
+	}
+
+	@Override
+	public void visitSelection(Selection sel) {
+		this.g.setColor(Color.blue);
+		this.g.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
+		this.g.drawRect(sel.getLoc().x, sel.getLoc().y, sel.getRect().width, sel.getRect().height);
+		
 	}
 	
 }

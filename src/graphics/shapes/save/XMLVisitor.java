@@ -10,17 +10,21 @@ import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
+import graphics.shapes.Selection;
 import graphics.shapes.Shape;
 import graphics.shapes.attributes.ColorAttributes;
 
 public class XMLVisitor extends FileVisitor {
 	 
-	Element currentElement;
+	protected Element currentElement;
+	protected Element rootElement ;
 
     
 
 	public XMLVisitor(PrintWriter o) {
 		super(o);
+		rootElement = doc.createElement("shapes");
+		doc.appendChild(rootElement);
 		
 	}
 	
@@ -36,12 +40,7 @@ public class XMLVisitor extends FileVisitor {
 		if (colorAtt.stroked()) {
 			s = colorAtt.strokedColor().getRGB();
 		}
-		/*
-		o.println("	<rectangle x=\"" + rect.getLoc().x + "\" y=\"" + rect.getLoc().y + "\"" + " height=\""
-				+ rect.getRect().height + "\"" + " width=\"" + rect.getRect().width + "\"" + " isfilled=\""
-				+ colorAtt.filled() + "\"" + " isstroked=\"" + colorAtt.stroked() + "\"" + " filled=\"" + f
-				+ "\"" + " stroked=\"" + s + "\"/>");	
-				*/	
+
 		
 		Element rec = doc.createElement("rectangle");
         rootElement.appendChild(rec);
@@ -210,6 +209,13 @@ public class XMLVisitor extends FileVisitor {
 			
 		}
 		rootElement.appendChild(collection);
+		
+	}
+
+
+	@Override
+	public void visitSelection(Selection selection) {
+		// TODO Auto-generated method stub
 		
 	}
 	

@@ -25,7 +25,7 @@ public abstract class FileVisitor implements ShapeVisitor {
 	protected DocumentBuilderFactory dbFactory;
 	protected DocumentBuilder dBuilder;
 	protected Document doc;
-	protected Element rootElement ;
+	
 
 	// root element
 
@@ -41,12 +41,10 @@ public abstract class FileVisitor implements ShapeVisitor {
 
 			doc = dBuilder.newDocument();
 
-			rootElement = doc.createElement("shapes");
-			doc.appendChild(rootElement);
+			
 			
 			
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
