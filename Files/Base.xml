@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<shapes>
+  <collection>
+    <rectangle filled="-65281" height="30" isfilled="true" isstroked="false" stroked="0" width="30" x="20" y="30"/>
+  </collection>
+  <collection>
+    <rectangle filled="-16776961" height="30" isfilled="true" isstroked="false" stroked="0" width="20" x="10" y="10"/>
+    <circle filled="0" isfilled="false" isstroked="true" radius="10" stroked="-16776961" x="100" y="100"/>
+    <text filled="-256" isfilled="true" isstroked="true" stroked="-16776961" text="hello" x="100" y="100"/>
+    <circle filled="0" isfilled="false" isstroked="true" radius="20" stroked="-12566464" x="150" y="100"/>
+  </collection>
+</shapes>

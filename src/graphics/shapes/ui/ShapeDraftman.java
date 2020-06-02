@@ -1,8 +1,10 @@
 package graphics.shapes.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -15,6 +17,7 @@ import graphics.shapes.SPath;
 import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
+import graphics.shapes.Selection;
 import graphics.shapes.Shape;
 import graphics.shapes.ShapeVisitor;
 import graphics.shapes.attributes.ColorAttributes;
@@ -31,14 +34,17 @@ import org.apache.commons.math3.fitting.WeightedObservedPoint;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
 
 public class ShapeDraftman implements ShapeVisitor {
-	private Graphics g;
-	// private Shape shape;
+
+	private Graphics2D g;	
 
 	public ShapeDraftman(Graphics g) {
-		this.g = g;
-	}
+		this.g = (Graphics2D) g;
+	}	
+	
 
-	// Dessin du carré de Sélection
+
+	// Dessin du carrÃ© de SÃ©lection
+
 	public void drawSelectionShape(Rectangle rect) {
 		final int size = 5;
 		g.setColor(Color.black);
@@ -282,5 +288,6 @@ public class ShapeDraftman implements ShapeVisitor {
 		}
 
 	}
+
 
 }

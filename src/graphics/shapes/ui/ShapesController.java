@@ -10,10 +10,11 @@ import graphics.shapes.Shape;
 import graphics.shapes.SPath;
 import graphics.shapes.attributes.PathAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
+import graphics.shapes.save.FileVisitor;
 import graphics.ui.Controller;
 
 public class ShapesController extends Controller {
-	// Implémente donc les Listeners via Controller
+
 	private Shape target;
 	private Point mouseStart;
 
@@ -22,7 +23,6 @@ public class ShapesController extends Controller {
 		this.target = null;
 	}
 
-	// Méthodes
 	private Shape getTarget() {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection) model).iterator();
@@ -100,6 +100,7 @@ public class ShapesController extends Controller {
 	public void mouseDragged(MouseEvent evt) {
 		Shape shape = null;
 		SPath draw = null;
+
 		boolean containsSelected = false;
 		Iterator<Shape> itr = ((SCollection) model).iterator();
 		while (itr.hasNext()) {
@@ -134,6 +135,7 @@ public class ShapesController extends Controller {
 		}
 	}
 
+
 	public void mouseReleased(MouseEvent evt) {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection) model).iterator();
@@ -147,4 +149,5 @@ public class ShapesController extends Controller {
 		}
 
 	}
+
 }
