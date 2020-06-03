@@ -8,9 +8,10 @@ import org.w3c.dom.Element;
 
 import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
+import graphics.shapes.SPath;
+import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
-import graphics.shapes.Selection;
 import graphics.shapes.Shape;
 import graphics.shapes.attributes.ColorAttributes;
 
@@ -213,8 +214,17 @@ public class XMLVisitor extends FileVisitor {
 	}
 
 
+
+
 	@Override
-	public void visitSelection(Selection selection) {
+	public void visitPath(SPath pass) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void visitPolygon(SPolygon poly) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,6 +1,5 @@
 package graphics.shapes.ui;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -17,7 +16,6 @@ import graphics.shapes.SPath;
 import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
-import graphics.shapes.Selection;
 import graphics.shapes.Shape;
 import graphics.shapes.ShapeVisitor;
 import graphics.shapes.attributes.ColorAttributes;
@@ -25,13 +23,9 @@ import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.PathAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoint;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
 
 public class ShapeDraftman implements ShapeVisitor {
 

@@ -1,7 +1,7 @@
 package graphics.shapes.attributes;
 
 public abstract class Attributes {
-	private  String id;
+	protected  String id;
 		
 	public abstract String getId();
 }

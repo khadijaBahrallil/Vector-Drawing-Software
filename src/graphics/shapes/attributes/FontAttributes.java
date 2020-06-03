@@ -6,12 +6,15 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 
 public class FontAttributes extends Attributes {
-	public static String id = "fontAttributes";
 	private Font font;
 	private Color color;
 	private FontMetrics fontMetrics;	
 	
 	public FontAttributes() {
+		
+		
+		
+		id = "fontAttributes";
 		// Utiliser le constructeur de Font
 		
 		//font = new Font("Arial", 0, 0);

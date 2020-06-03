@@ -50,13 +50,11 @@ public class ControlPanel extends JMenuBar {
 	private SCollection model;
 	private Animation animation;
 	private boolean animationOn;
-	private String sText, path, speed, gridState;
+	private String speed;
 	private JMenuBar menuBar;
-  private JMenu menuFile;
+    private JMenu menuFile;
 	private JMenu menuSave;
 	private JMenu menuOpen;
-	
-	private SCollection model;
 	private Writer writer;
 	private Reader reader;
 	
@@ -85,7 +83,7 @@ public class ControlPanel extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					writer = new Writer(sview);
+					writer = new Writer(shapesView);
 					writer.write(new XMLVisitor(writer.getWriter()));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -101,7 +99,7 @@ public class ControlPanel extends JMenuBar {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				try {
-					writer = new Writer(sview);
+					writer = new Writer(shapesView);
 					writer.write(new SVGVisitor(writer.getWriter()));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -116,7 +114,7 @@ public class ControlPanel extends JMenuBar {
 		menuFile.add(menuSave);
 		
 		
-menuOpen = new JMenu(" Ouvrir ");
+		menuOpen = new JMenu(" Ouvrir ");
 		
 		JMenuItem openXml = new JMenuItem(" XML ");
 		openXml.addActionListener(new ActionListener() {
@@ -161,7 +159,7 @@ menuOpen = new JMenu(" Ouvrir ");
 		
 		
 		
-		this.add(menuFile);
+		
 		menuShape = new JMenu(" Nouvelle Forme ");		
 
 		
@@ -207,7 +205,6 @@ menuOpen = new JMenu(" Ouvrir ");
 		});
 		menuShape.add(mText);
 		
-		this.add(menuShape);
 		
 		JMenuItem mTriangle = new JMenuItem("Triangle");
 		mTriangle.addActionListener(new ActionListener() {
@@ -359,8 +356,11 @@ menuOpen = new JMenu(" Ouvrir ");
 		menuAnim.add(mSpeed);
 		menuAnim.add(speedInfo);
 		
-		menuBar.add(menuAnim);
-		menuBar.add(menuShape);
+		
+		
+		this.add(menuFile);
+		this.add(menuShape);
+		this.add(menuAnim);
 	}
 	
 	public JMenuBar getMenuBar() {
