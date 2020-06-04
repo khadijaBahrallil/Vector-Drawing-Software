@@ -2,7 +2,6 @@ package graphics.shapes;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 public class SPolygon extends Shape{
 
@@ -16,16 +15,13 @@ public class SPolygon extends Shape{
 		this.points = null;
 	}
 	
-
 	@Override
 	public Point getLoc() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setLoc(Point point) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -34,7 +30,6 @@ public class SPolygon extends Shape{
 		for(Point p : this.points) {
 			p.setLocation(p.getX()+dx, p.getY()+dy);;
 		}
-		
 	}
 
 	@Override
@@ -73,6 +68,14 @@ public class SPolygon extends Shape{
 	
 	public void setPoints(Point[] points) {
 		this.points = points;
+	}
+	
+	public String printPoints() {
+		String s = "";
+		for(Point p: this.points) {
+			s +=p.x +","+p.y+" "; 
+		}
+		return s.substring(0, s.length() - 1);
 	}
 
 }

@@ -33,6 +33,7 @@ import graphics.shapes.animation.Animation;
 import graphics.shapes.attributes.ColorAttributes;
 import graphics.shapes.attributes.FontAttributes;
 import graphics.shapes.attributes.PathAttributes;
+import graphics.shapes.attributes.PathAttributes.Type;
 import graphics.shapes.attributes.SelectionAttributes;
 import graphics.shapes.save.Reader;
 import graphics.shapes.save.SVGReader;
@@ -248,7 +249,7 @@ public class ControlPanel extends JMenuBar {
 				SPath pathPts = new SPath();
 				pathPts.addAttributes(new ColorAttributes(false,true,Color.YELLOW,Color.BLACK));
 				pathPts.addAttributes(new SelectionAttributes());
-				pathPts.addAttributes(new PathAttributes("Points","IsDown"));
+				pathPts.addAttributes(new PathAttributes(Type.method_Points,"IsDown"));
 				model.add(pathPts);
 				ShapesController.getView().repaint();
 			}	
@@ -264,7 +265,7 @@ public class ControlPanel extends JMenuBar {
 				SPath pathLines = new SPath();
 				pathLines.addAttributes(new ColorAttributes(false,true,Color.YELLOW,Color.BLACK));
 				pathLines.addAttributes(new SelectionAttributes());
-				pathLines.addAttributes(new PathAttributes("Lines","IsDown"));
+				pathLines.addAttributes(new PathAttributes(Type.method_Lines,"IsDown"));
 				model.add(pathLines);
 				ShapesController.getView().repaint();
 			}	
@@ -280,7 +281,7 @@ public class ControlPanel extends JMenuBar {
 				SPath pathInterpolation = new SPath();
 				pathInterpolation.addAttributes(new ColorAttributes(false,true,Color.YELLOW,Color.BLACK));
 				pathInterpolation.addAttributes(new SelectionAttributes());
-				pathInterpolation.addAttributes(new PathAttributes("Interpolation","IsDown"));
+				pathInterpolation.addAttributes(new PathAttributes(Type.method_Interpolation,"IsDown"));
 				model.add(pathInterpolation);
 				ShapesController.getView().repaint();
 			}	
@@ -366,6 +367,7 @@ public class ControlPanel extends JMenuBar {
 	public JMenuBar getMenuBar() {
 		return this.menuBar;
 	}
+	
 	
 	
 }

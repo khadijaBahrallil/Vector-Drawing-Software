@@ -41,7 +41,7 @@ public class Reader {
 			model = new SCollection();
 			factory = DocumentBuilderFactory.newInstance();
 			builder = factory.newDocumentBuilder();
-			document = builder.parse(new File(path + file + ".xml"));
+			document = builder.parse(new File(path + file + this.strat.extension));
 			root = document.getDocumentElement();
 
 			final NodeList rootNodes = root.getChildNodes();

@@ -69,5 +69,13 @@ public class SPath extends Shape{
 	@Override
 	public void setLoc(Point point) {
 	}
+	public String printPoints() {
+		String s = "";
+		for(Point p: this.points) {
+			s +=p.x +","+p.y+" "; 
+		}
+		return s.substring(0, s.length() - 1);
+	}
+
 	
 }

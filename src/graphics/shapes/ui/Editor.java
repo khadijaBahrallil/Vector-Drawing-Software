@@ -125,7 +125,7 @@ public class Editor extends JFrame
 		SPath path = new SPath(ps);
 		path.addAttributes(new ColorAttributes(false,true,Color.BLUE,Color.BLACK));
 		path.addAttributes(new SelectionAttributes());
-		path.addAttributes(new PathAttributes("Lines",null));
+		path.addAttributes(new PathAttributes(PathAttributes.Type.method_Lines,null));
 		this.model.add(path);
 	}
 	

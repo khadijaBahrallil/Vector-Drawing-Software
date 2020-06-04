@@ -14,6 +14,7 @@ import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
 import graphics.shapes.Shape;
 import graphics.shapes.attributes.ColorAttributes;
+import graphics.shapes.attributes.PathAttributes;
 
 public class XMLVisitor extends FileVisitor {
 	 
@@ -92,11 +93,7 @@ public class XMLVisitor extends FileVisitor {
 			f = colorAtt.filledColor().getRGB();
 		if (colorAtt.stroked())
 			s = colorAtt.strokedColor().getRGB();
-		/*
-		o.println("	<circle x=\"" + circle.getLoc().x + "\" y=\"" + circle.getLoc().y + "\"" + " radius=\""
-				+ circle.getRadius() + "\"" + " isfilled=\"" + colorAtt.filled() + "\"" + " isstroked=\""
-				+ colorAtt.stroked() + "\"" + " filled=\"" + f + "\"" + " stroked=\"" + s + "\"/>");
-				*/
+		
 		
 		Element cir = doc.createElement("circle");
         rootElement.appendChild(cir);
@@ -149,11 +146,6 @@ public class XMLVisitor extends FileVisitor {
 		if (colorAttributes.stroked())
 			s = colorAttributes.strokedColor().getRGB();
 		
-		/*
-		o.println(" <text text=\"" + text.getText() + "\"" + " x=\"" + text.getLoc().x + "\" y=\"" + text.getLoc().y
-				+ "\"" + " filled=\"" + colorAttributes.filled() + "\"" + " stroked=\"" + colorAttributes.stroked()
-				+ "\"" + " filledColor=\"" + f + "\"" + " strokedColor=\"" + s + "\" />");	
-		*/
 		Element tex = doc.createElement("text");
         rootElement.appendChild(tex);
 
@@ -217,17 +209,101 @@ public class XMLVisitor extends FileVisitor {
 
 
 	@Override
-	public void visitPath(SPath pass) {
-		// TODO Auto-generated method stub
+	public void visitPath(SPath path) {
+		ColorAttributes colorAtt = (ColorAttributes) path.getAttributes(colorAttribute.getId());
+		int f = 0;
+		int s = 0;
+		if (colorAtt.filled()) {
+			f = colorAtt.filledColor().getRGB();
+		}
+		if (colorAtt.stroked()) {
+			s = colorAtt.strokedColor().getRGB();
+		}
+		Element p = doc.createElement("path");
+        rootElement.appendChild(p);
+
+        
+        Attr stroked = doc.createAttribute("stroked");
+        stroked.setValue(Integer.toString(s));
+        p.setAttributeNode(stroked);
+        
+        Attr filled = doc.createAttribute("filled");
+        filled.setValue(Integer.toString(f));
+        p.setAttributeNode(filled);
+        
+        Attr isstroked = doc.createAttribute("isstroked");
+        isstroked.setValue(Boolean.toString(colorAtt.stroked()));
+        p.setAttributeNode(isstroked);
+        
+        Attr isfilled = doc.createAttribute("isfilled");
+        isfilled.setValue(Boolean.toString(colorAtt.filled()));
+        p.setAttributeNode(isfilled);
+        
+      
+        
+        Attr points = doc.createAttribute("points");
+        points.setValue(path.printPoints());
+        p.setAttributeNode(points);
+       
+        Attr method = doc.createAttribute("method");
+        method.setValue(((PathAttributes)path.getAttributes("pathAttributes")).getMethod().toString());
+        p.setAttributeNode(method);
+
+        
+        
+        currentElement = p ;
 		
 	}
 
 
 	@Override
 	public void visitPolygon(SPolygon poly) {
-		// TODO Auto-generated method stub
+		ColorAttributes colorAtt = (ColorAttributes) poly.getAttributes(colorAttribute.getId());
+		int f = 0;
+		int s = 0;
+		if (colorAtt.filled()) {
+			f = colorAtt.filledColor().getRGB();
+		}
+		if (colorAtt.stroked()) {
+			s = colorAtt.strokedColor().getRGB();
+		}
+		Element polyg = doc.createElement("polygon");
+        rootElement.appendChild(polyg);
+
+        
+        Attr stroked = doc.createAttribute("stroked");
+        stroked.setValue(Integer.toString(s));
+        polyg.setAttributeNode(stroked);
+        
+        Attr filled = doc.createAttribute("filled");
+        filled.setValue(Integer.toString(f));
+        polyg.setAttributeNode(filled);
+        
+        Attr isstroked = doc.createAttribute("isstroked");
+        isstroked.setValue(Boolean.toString(colorAtt.stroked()));
+        polyg.setAttributeNode(isstroked);
+        
+        Attr isfilled = doc.createAttribute("isfilled");
+        isfilled.setValue(Boolean.toString(colorAtt.filled()));
+        polyg.setAttributeNode(isfilled);
+        
+      
+        
+        Attr y = doc.createAttribute("points");
+        y.setValue(poly.printPoints());
+        polyg.setAttributeNode(y);
+       
+        
+        
+        currentElement = polyg ;
 		
 	}
+	
+	public String nameFile(String path, String file) {
+		String extension = ".xml";
+		return path + file + extension ;
+	}
+
 	
 	
 

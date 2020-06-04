@@ -99,4 +99,8 @@ public class SCollection extends Shape {
 	public ArrayList<Shape> getCollection() {
 		return collection;
 	}
+
+	public void delete(Shape shape) {
+		this.collection.remove(shape);
+	}
 }

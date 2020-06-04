@@ -14,6 +14,7 @@ import graphics.shapes.SRectangle;
 import graphics.shapes.SText;
 import graphics.shapes.Shape;
 import graphics.shapes.attributes.ColorAttributes;
+import graphics.shapes.attributes.PathAttributes;
 
 public class SVGVisitor extends FileVisitor {
 	
@@ -183,15 +184,73 @@ public class SVGVisitor extends FileVisitor {
 	
 
 	@Override
-	public void visitPath(SPath pass) {
-		// TODO Auto-generated method stub
+	public void visitPath(SPath path) {
+		ColorAttributes colorAtt = (ColorAttributes) path.getAttributes(colorAttribute.getId());
+		String fill = "#000000";
+		String stroke = "#000000";
+		if (colorAtt.filled()) {
+			fill = String.format("#%02x%02x%02x", colorAtt.filledColor().getRed(), colorAtt.filledColor().getGreen(), colorAtt.filledColor().getBlue()); 
+		} 
+		if (colorAtt.stroked()) {
+			stroke = String.format("#%02x%02x%02x", colorAtt.strokedColor().getRed(), colorAtt.strokedColor().getGreen(), colorAtt.strokedColor().getBlue()); 
+		}
+		Element p = doc.createElement("path");
+        rootElement.appendChild(p);
+
+        
+        Attr style = doc.createAttribute("style");
+        style.setValue("fill: "+fill+"; stroke: "+stroke+";");
+        p.setAttributeNode(style);
+      
+        
+        Attr points = doc.createAttribute("points");
+        points.setValue(path.printPoints());
+        p.setAttributeNode(points);
+       
+        Attr method = doc.createAttribute("method");
+        method.setValue(((PathAttributes)path.getAttributes("pathAttributes")).getMethod().toString());
+        p.setAttributeNode(method);
+
+        
+        
+        currentElement = p ;
 		
 	}
 
 	@Override
 	public void visitPolygon(SPolygon poly) {
-		// TODO Auto-generated method stub
+		ColorAttributes colorAtt = (ColorAttributes) poly.getAttributes(colorAttribute.getId());
+		String fill = "#000000";
+		String stroke = "#000000";
+		if (colorAtt.filled()) {
+			fill = String.format("#%02x%02x%02x", colorAtt.filledColor().getRed(), colorAtt.filledColor().getGreen(), colorAtt.filledColor().getBlue()); 
+		} 
+		if (colorAtt.stroked()) {
+			stroke = String.format("#%02x%02x%02x", colorAtt.strokedColor().getRed(), colorAtt.strokedColor().getGreen(), colorAtt.strokedColor().getBlue()); 
+		}
+		Element polyg = doc.createElement("polygon");
+        rootElement.appendChild(polyg);
+
+        
+        Attr style = doc.createAttribute("style");
+        style.setValue("fill: "+fill+"; stroke: "+stroke+";");
+        polyg.setAttributeNode(style);
+  
+       
+        
+        Attr pts = doc.createAttribute("points");
+        pts.setValue(poly.printPoints());
+        polyg.setAttributeNode(pts);
+       
+        
+        
+        currentElement = polyg ;
 		
 	}
+	public String nameFile(String path, String file) {
+		String extension = ".svg";
+		return path + file + extension ;
+	}
+
 
 }

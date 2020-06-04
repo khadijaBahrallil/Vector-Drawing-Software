@@ -12,6 +12,12 @@ public class SCircle extends Shape {
 		this.setRadius(radius);
 	}
 	
+	public SCircle(int radius) {
+		this.point = new Point((int) (Math.random() * 280), (int) (Math.random() * 280));
+		this.setLoc(point);
+		this.setRadius(radius);
+	}
+
 	@Override
 	public Point getLoc() {
 		return this.loc;

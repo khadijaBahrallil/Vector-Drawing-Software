@@ -24,16 +24,22 @@ public class Writer {
 	PrintWriter o;
 	FileVisitor strategy ;
 	ShapesController shapesController;
-	String file;
+	String fileName;
 	String path;
 	
 	public Writer(ShapesView sview) throws FileNotFoundException {
 		
-		this.file = JOptionPane.showInputDialog("Save As (without extension) :");
+		this.fileName = JOptionPane.showInputDialog("Save As (without extension) :");
 		this.path = "Files/";
+		
+		File file = new File(path);
+
+		if (!file.isDirectory()) {
+			
+			file.mkdir();
+			
+		}
 		this.shapesController = (ShapesController) sview.getController();
-		o = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path + file +".xml")),
-				true);
 		
 	}
 
@@ -42,6 +48,9 @@ public class Writer {
 		try {
 		
 		this.strategy = fileStrat;
+		o = new PrintWriter(new BufferedOutputStream(new FileOutputStream(this.strategy.nameFile(path,fileName))),
+				true);
+		
 		this.strategy.visitCollection((SCollection) shapesController.getModel());
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();

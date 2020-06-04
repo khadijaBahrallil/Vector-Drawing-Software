@@ -48,7 +48,7 @@ public abstract class FileVisitor implements ShapeVisitor {
 			e.printStackTrace();
 		}
 	}
-
+	public abstract  String nameFile(String path , String file);
 	public abstract void visitRectangle(SRectangle rect);
 
 	public abstract void visitCircle(SCircle circle);

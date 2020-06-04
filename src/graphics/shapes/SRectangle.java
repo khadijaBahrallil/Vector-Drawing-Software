@@ -11,6 +11,11 @@ public class SRectangle extends Shape {
 		this.rect = new Rectangle((int)point.getX(), (int)point.getY(), rWidth, rHeight); // Utilisation de la classe java Rectangle
 	}
 	
+	public SRectangle(int width, int height) {
+		this.point = new Point((int) (Math.random() * 280), (int) (Math.random() * 280));
+		this.rect = new Rectangle((int) point.getX(), (int) point.getY(), width, height);
+	}
+
 	public Rectangle getRect() {
 		return rect;
 	}
@@ -18,7 +23,7 @@ public class SRectangle extends Shape {
 	@Override
 	public Point getLoc() {
 		//return point;
-		return this.rect.getLocation(); // Si on utilise les méthodes de la classe java Point
+		return this.rect.getLocation(); // Si on utilise les mï¿½thodes de la classe java Point
 	}
 	
 	@Override

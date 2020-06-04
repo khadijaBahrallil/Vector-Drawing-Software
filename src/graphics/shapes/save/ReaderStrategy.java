@@ -7,6 +7,8 @@ import graphics.shapes.Shape;
 
 public abstract class ReaderStrategy {
 	
+	public String extension = null;
+
 	public ReaderStrategy() {
 		
 		

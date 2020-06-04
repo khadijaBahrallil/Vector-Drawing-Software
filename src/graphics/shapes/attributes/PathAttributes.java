@@ -1,16 +1,19 @@
 package graphics.shapes.attributes;
 
 public class PathAttributes extends Attributes{
-
-	private String method;
+	private Type method;
 	private String penStatus;
 	
-	public PathAttributes(String s, String status) {
+	public PathAttributes(Type m, String status) {
 		this.id = "pathAttributes";
-		this.method = s;
+		this.method = m;
 		this.penStatus = status;
 	}
 	
+	public PathAttributes() {
+		this.id = "pathAttributes";
+	}
+
 	public String getPenStatus() {
 		return penStatus;
 	}
@@ -19,11 +22,11 @@ public class PathAttributes extends Attributes{
 		this.penStatus = penStatus;
 	}
 	
-	public String getMethod() {
+	public Type getMethod() {
 		return method;
 	}
 
-	public void setMethod(String method) {
+	public void setMethod(Type method) {
 		this.method = method;
 	}
 
@@ -31,5 +34,11 @@ public class PathAttributes extends Attributes{
 	public String getId() {
 		return this.id;
 	}
+	
+	public enum Type {
+		  method_Points,
+		  method_Lines,
+		  method_Interpolation;	
+		}
 
 }

@@ -5,16 +5,15 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
+
 import graphics.shapes.SCollection;
 import graphics.shapes.Shape;
 import graphics.shapes.SPath;
 import graphics.shapes.attributes.PathAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
-import graphics.shapes.save.FileVisitor;
 import graphics.ui.Controller;
 
 public class ShapesController extends Controller {
-
 	private Shape target;
 	private Point mouseStart;
 
@@ -23,7 +22,7 @@ public class ShapesController extends Controller {
 		this.target = null;
 	}
 
-	private Shape getTarget() {
+	public Shape getTarget() {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection) model).iterator();
 		boolean targeted = false;
@@ -68,8 +67,7 @@ public class ShapesController extends Controller {
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Evenements Listeners
+
 	public void mousePressed(MouseEvent e) {
 		mouseStart = new Point(e.getX(), e.getY());
 		try {
@@ -77,7 +75,7 @@ public class ShapesController extends Controller {
 		} catch (IndexOutOfBoundsException e1) {
 
 		}
-		// selection de la forme?
+		
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -86,13 +84,16 @@ public class ShapesController extends Controller {
 			} else {
 				this.unselectAll();
 			}
-			///////////////////////////////////////
 			SelectionAttributes sA = (SelectionAttributes) target.getAttributes("selectionAttributes");
 			if (sA != null) {
 				sA.select();
 			}
 		} else {
 			this.unselectAll();
+		}// If Right Click
+		if (e.getButton() == 3) {
+			PopupMenu rightClick = new PopupMenu(this); // Initialize a RightClight class Object
+			rightClick.pop(e); // Call its method
 		}
 		this.getView().repaint();
 	}
@@ -149,5 +150,38 @@ public class ShapesController extends Controller {
 		}
 
 	}
+	
+
+	public void delete() {
+		SCollection selectedShapes = this.getSelected(); // Cr�ation de la Collection des formes selectionn�es
+		Iterator<Shape> itr = selectedShapes.iterator(); // Crr�ation d'un it�rateur
+		Shape shape = null;
+		while (itr.hasNext()) { // On parcourt la collection
+			shape = itr.next(); // On it�re
+			if (shape != null) {
+				((SCollection) model).delete(shape);
+				System.out.println("Deleted");
+			}
+		}
+		this.getView().repaint(); // R�actualise
+	}
+	public SCollection getSelected() {
+		SCollection selectedShapes = new SCollection();
+		Shape shape = null;
+		Iterator<Shape> itr = ((SCollection) model).iterator();
+		while (itr.hasNext()) {
+			shape = itr.next();
+			if (shape != null) {
+				SelectionAttributes sA = (SelectionAttributes) shape.getAttributes("selectionAttributes");
+				if (sA != null && sA.isSelected()) {
+					selectedShapes.add(shape);
+				}
+			}
+		}
+		return selectedShapes;
+	}
+	
+	
+	
 
 }

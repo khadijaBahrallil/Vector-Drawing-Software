@@ -14,6 +14,11 @@ public class SText extends Shape {
 		this.setText(text);
 	}
 	
+	public SText(String text) {
+		this.point = new Point((int) (Math.random() * 280), (int) (Math.random() * 280));
+		this.setLoc(point);
+		this.setText(text);
+	}
 	@Override
 	public Point getLoc() {
 		return this.loc;
