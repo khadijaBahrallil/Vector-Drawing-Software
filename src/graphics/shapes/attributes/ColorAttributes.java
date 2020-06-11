@@ -8,9 +8,9 @@ public class ColorAttributes extends Attributes {
 	private Color filledColor;
 	private Color strokedColor;
 	
-	// Constructeur par défaut
+	// Constructeur par dï¿½faut
 	public ColorAttributes () {
-		id = "colorAttributes";
+		this.id = "colorAttributes";
 		this.filled = true;
 		this.stroked = true;
 		this.filledColor = Color.blue;
@@ -18,7 +18,7 @@ public class ColorAttributes extends Attributes {
 	}
 	
 	public ColorAttributes (boolean filled, boolean stroked, Color filledColor, Color strokedColor) {
-		id = "colorAttributes";
+		this.id = "colorAttributes";
 		this.filled = filled;
 		this.stroked = stroked;
 		this.filledColor = filledColor;

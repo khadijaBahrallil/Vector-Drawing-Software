@@ -22,6 +22,13 @@ public class SCollection extends Shape {
 		this.collection.add(shape);
 	}
 	
+	
+	
+
+	public void remove(Shape s) {
+		collection.remove(s);
+	}
+	
 	public Iterator<Shape> iterator() {
 		return collection.iterator();
 	}
@@ -29,7 +36,7 @@ public class SCollection extends Shape {
 	@Override
 	public Point getLoc() {
 		// On retourne la position de la 1ere forme
-		// A vérifier
+		// A vï¿½rifier
 		if (collection != null)
 			return collection.get(0).getLoc();
 		else return null;
@@ -37,7 +44,7 @@ public class SCollection extends Shape {
 
 	@Override
 	public void setLoc(Point point) {
-		// A vérifier aussi
+		// A vï¿½rifier aussi
 		Iterator<Shape> itr = collection.iterator();
 		while (itr.hasNext()) {
 			itr.next().setLoc(point);
@@ -56,36 +63,40 @@ public class SCollection extends Shape {
 	@Override
 	public Rectangle getBounds() {
 		Iterator<Shape> itr = collection.iterator();
-		// Deux façons de faire pour déclarer bounds:		
-		// 1
-		/*
-		Rectangle bounds = itr.next().getBounds();
-		while (itr.hasNext()) {
-			Shape shape = itr.next();
-			bounds = bounds.union(shape.getBounds());
-		}
-		*/		
-		//2
-		Rectangle bounds = new Rectangle(-1,-1); // Rectangle traité comme non-existant (bounds = null ne fonctionnant pas)
+	
+		Rectangle bounds = new Rectangle(-1,-1); // Rectangle traitï¿½ comme non-existant (bounds = null ne fonctionnant pas)
 		while (itr.hasNext()) {
 			Shape shape = itr.next();
 			bounds = bounds.union(shape.getBounds());
 		}
 		return bounds;
-		
-		//3 -> Bugs
-		/*
-		Rectangle bounds = new Rectangle();
-		for (Iterator<Shape> itr = collection.iterator(); itr.hasNext();) {
-			bounds.union(((Shape) itr.next()).getBounds());
-		}
-		return bounds;
-		*/
+
 	}
 	
 
 	@Override
 	public void accept(ShapeVisitor sVisitor) {
 		sVisitor.visitCollection(this);		
-	}	
+	}
+
+	public ArrayList<Shape> getCollection() {
+		return collection;
+	}
+
+	public void delete(Shape shape) {
+		this.collection.remove(shape);
+	}
+
+	@Override
+	public void resize() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void resize(Shape s) {
+		SCollection col = (SCollection) s;
+		for (Shape shape : col.getCollection()) {
+			shape.resize();
+		}
+	}
+
 }

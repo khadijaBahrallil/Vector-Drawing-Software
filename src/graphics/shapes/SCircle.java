@@ -3,6 +3,8 @@ package graphics.shapes;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import javax.swing.JOptionPane;
+
 public class SCircle extends Shape {
 	private Point loc;
 	private int radius;
@@ -12,6 +14,12 @@ public class SCircle extends Shape {
 		this.setRadius(radius);
 	}
 	
+	public SCircle(int radius) {
+		this.point = new Point((int) (Math.random() * 280), (int) (Math.random() * 280));
+		this.setLoc(point);
+		this.setRadius(radius);
+	}
+
 	@Override
 	public Point getLoc() {
 		return this.loc;
@@ -46,6 +54,12 @@ public class SCircle extends Shape {
 	@Override
 	public void accept(ShapeVisitor sVisitor) {
 		sVisitor.visitCircle(this);		
+	}
+
+	@Override
+	public void resize() {
+		int askRadius = Integer.parseInt(JOptionPane.showInputDialog("Please enter radius : "));
+		this.radius = askRadius;		
 	}
 	
 }

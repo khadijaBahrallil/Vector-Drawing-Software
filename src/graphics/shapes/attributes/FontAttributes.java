@@ -11,8 +11,12 @@ public class FontAttributes extends Attributes {
 	private FontMetrics fontMetrics;	
 	
 	public FontAttributes() {
-		// Utiliser le constructeur de Font
+		
+		
+		
 		id = "fontAttributes";
+		// Utiliser le constructeur de Font
+		
 		//font = new Font("Arial", 0, 0);
 		font = Font.decode("Helvetica");
 		color = Color.BLUE;
@@ -31,7 +35,7 @@ public class FontAttributes extends Attributes {
 		return id;
 	}
 	
-	// Méthode en plus par rapport au sujet
+	// Mï¿½thode en plus par rapport au sujet
 	public void setFontMetrics(FontMetrics fMetrics) {
 		this.fontMetrics = fMetrics;
 	}
