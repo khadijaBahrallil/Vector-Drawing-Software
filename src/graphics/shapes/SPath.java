@@ -77,5 +77,11 @@ public class SPath extends Shape{
 		return s.substring(0, s.length() - 1);
 	}
 
+	@Override
+	public void resize() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

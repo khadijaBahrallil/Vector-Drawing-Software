@@ -1,11 +1,11 @@
 package graphics.shapes.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,7 +32,6 @@ public class ShapeDraftman implements ShapeVisitor {
 	private Graphics2D g;
 	private SelectionAttributes s = new SelectionAttributes();
 	private ColorAttributes c = new ColorAttributes();
-	private FontAttributes f = new FontAttributes();
 	private PathAttributes p = new PathAttributes();
 	
 	
@@ -42,7 +41,6 @@ public class ShapeDraftman implements ShapeVisitor {
 		this.g = (Graphics2D) g;
 	}
 
-	// Dessin du carré de Sélection
 
 	public void drawSelectionShape(Rectangle rect) {
 		final int size = 5;
@@ -54,8 +52,8 @@ public class ShapeDraftman implements ShapeVisitor {
 	@Override
 	public void visitRectangle(SRectangle rect) {
 		if (rect != null) {
-			int sX = rect.getRect().x; // ou sX = rect.getLoc().x;
-			int sY = rect.getRect().y; // ou sY = rect.getLoc().y;
+			int sX = rect.getRect().x; 
+			int sY = rect.getRect().y; 
 			int sW = rect.getRect().width;
 			int sH = rect.getRect().height;
 
@@ -112,34 +110,41 @@ public class ShapeDraftman implements ShapeVisitor {
 
 	@Override
 	public void visitText(SText stext) {
+		Graphics2D g2d = (Graphics2D) g.create();
 		if (stext != null) {
 			Point loc = stext.getLoc();
 			String text = stext.getText();
 
-			FontAttributes fA = (FontAttributes) stext.getAttributes(f.getId());
+			FontAttributes fA = (FontAttributes) stext.getAttributes("fontAttributes");
 			if (fA != null) {
 				FontMetrics fMetrics = g.getFontMetrics(fA.font());
 				fA.setFontMetrics(fMetrics);
+				int sX = stext.getBounds().x;
+				int sY = stext.getBounds().y;
+				int sW = stext.getBounds().width;
+				int sH = stext.getBounds().height;
 
-				ColorAttributes cA = (ColorAttributes) stext.getAttributes(c.getId());
+				g2d.translate(sX + sW / 2, sY + sH / 2);
+				g2d.translate(-sX - sW / 2, -sY - sH / 2);
+				ColorAttributes cA = (ColorAttributes) stext.getAttributes("colorAttributes");
+
+				Font fonte = new Font("Helvetica", Font.BOLD, stext.getSizeText());
+				g2d.setFont(fonte);
+
 				if (cA != null) {
 					if (cA.filled()) {
 						if (stext.getBounds() != null) {
-							int sX = stext.getBounds().x;
-							int sY = stext.getBounds().y;
-							int sW = stext.getBounds().width;
-							int sH = stext.getBounds().height;
-							g.setColor(cA.filledColor());
-							g.fillRect(sX, sY, sW, sH);
+							g2d.setColor(cA.filledColor());
+							g2d.fillRect(sX, sY, sW, sH);
 						}
 					}
 					if (cA.stroked()) {
-						g.setColor(cA.strokedColor());
-						g.drawString(text, loc.x, loc.y);
+						g2d.setColor(cA.strokedColor());
+						g2d.drawString(text, loc.x, loc.y);
 					}
 				}
 
-				SelectionAttributes sA = (SelectionAttributes) stext.getAttributes(s.getId());
+				SelectionAttributes sA = (SelectionAttributes) stext.getAttributes("selectionAttributes");
 				if (sA != null && sA.isSelected()) {
 					drawSelectionShape(stext.getBounds());
 				}
@@ -165,39 +170,39 @@ public class ShapeDraftman implements ShapeVisitor {
 	}
 
 	@Override
-	public void visitPolygon(SPolygon poly) {
-		Polygon polygon = new Polygon();
-		if (poly != null) {
+	public void visitPolygon (SPolygon spolygone) {
+			Graphics2D g2d = (Graphics2D) g.create();
+			if (spolygone != null) {
+				int sX = spolygone.getBounds().x;
+				int sY = spolygone.getBounds().y;
+				int sW = spolygone.getBounds().width;
+				int sH = spolygone.getBounds().height;
 
-			for (Point pt : poly.getPoints()) {
+				g2d.translate(sX + sW / 2, sY + sH / 2);
+				g2d.scale(spolygone.getScale(), spolygone.getScale());
+				g2d.translate(-sX - sW / 2, -sY - sH / 2);
 
-				int x = (int) pt.getX();
-				int y = (int) pt.getY();
-
-				polygon.addPoint(x, y);
-
-			}
-
-			ColorAttributes cA = (ColorAttributes) poly.getAttributes(c.getId());
-			if (cA != null) {
-				if (cA.filled()) {
-					g.setColor(cA.filledColor());
-					g.fillPolygon(polygon);
+				ColorAttributes cA = (ColorAttributes) spolygone.getAttributes("colorAttributes");
+				if (cA != null) {
+					if (cA.filled()) {
+						g2d.setColor(cA.filledColor());
+						g2d.fillPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
+					}
+					if (cA.stroked()) {
+						g2d.setColor(cA.strokedColor());
+						g2d.drawPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
+					}
+				} else {
+					g2d.setColor(Color.BLACK);
+					g2d.drawPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
 				}
-				if (cA.stroked()) {
-					g.setColor(cA.strokedColor());
-					g.drawPolygon(polygon);
-				}
-			} else {
-				g.setColor(Color.BLACK);
-				g.fillPolygon(polygon);
-			}
 
-			SelectionAttributes sA = (SelectionAttributes) poly.getAttributes(s.getId());
-			if (sA != null && sA.isSelected()) {
-				drawSelectionShape(poly.getBounds());
+				SelectionAttributes sA = (SelectionAttributes) spolygone.getAttributes("selectionAttributes");
+				if (sA != null && sA.isSelected()) {
+					drawSelectionShape(spolygone.getBounds());
+				}
+
 			}
-		}
 
 	}
 
@@ -235,24 +240,53 @@ public class ShapeDraftman implements ShapeVisitor {
 
 					if (points1.size() > 2) {
 						double[] xs = new double[points1.size()];
-						double[] ys = new double[points1.size()];
-						ArrayList<WeightedObservedPoint> observations = new ArrayList<>();
 
-						
-						 for (int i = 0; i < points1.size(); i++) { 
-							 observations.add(new WeightedObservedPoint(1.0, points1.get(i).getX(), points1.get(i).getY())); 
-							 xs[i]= points1.get(i).getX(); 
-						} 
-						 PolynomialCurveFitter function = PolynomialCurveFitter.create(3);
-						 
-						 PolynomialFunction func = new PolynomialFunction(function.fit(observations));
-						 
-						 for (int i = 0; i < xs.length; i++) { 
-							 ys[i] = func.value(xs[i]); 
-						} 
-						 for (int i= 0; i < xs.length - 1; i++) { 
-							 g.drawLine((int) xs[i], (int) ys[i], (int) xs[i], (int) ys[i]); 
-						} 
+						double[] ys = new double[points1.size()];
+ 						ArrayList<WeightedObservedPoint> observations = new ArrayList<>();
+
+ 						for (int i = 0; i < points1.size(); i++) {
+ 							observations
+ 									.add(new WeightedObservedPoint(1.0, points1.get(i).getX(), points1.get(i).getY()));
+ 							xs[i] = points1.get(i).getX();
+ 						}
+ 						PolynomialCurveFitter function = PolynomialCurveFitter.create(3);
+
+ 						PolynomialFunction func = new PolynomialFunction(function.fit(observations));
+
+ 						for (int i = 0; i < xs.length; i++) {
+ 							ys[i] = func.value(xs[i]);
+ 						}
+ 						for (int i = 0; i < xs.length; i++) {
+ 							g.drawLine((int) xs[i], (int) ys[i], (int) xs[i], (int) ys[i]);
+ 						}
+ 					}
+ 					break;
+ 				case method_Test:
+ 					if (path.getPoints().size() > 10) {
+ 						ArrayList<Point> paths = path.getPoints();
+ 						ArrayList<Point> draw = new ArrayList<>();
+ 						int np = 5;
+ 						int space = paths.size() / np;
+ 						double[] xs = new double[space];
+ 						double[] ys = new double[space];
+ 						ArrayList<WeightedObservedPoint> observations = new ArrayList<>();
+ 						for (int i = 1; i <= np; i++) {
+ 							for (int j = (i - 1) * space; j < i * space; j++) {
+ 								observations
+ 										.add(new WeightedObservedPoint(1.0, paths.get(j).getX(), paths.get(j).getY()));
+ 								xs[j%space] = paths.get(j).getX();
+ 							}
+ 							PolynomialCurveFitter function = PolynomialCurveFitter.create(3);
+
+ 							PolynomialFunction func = new PolynomialFunction(function.fit(observations));
+ 							for (int t = 0; t < xs.length; t++) {
+ 								ys[t] = func.value(xs[t]);
+ 								draw.add(new Point((int) xs[t],(int)ys[t]));
+ 							}
+ 						}
+ 						for (int i = 0; i < draw.size(); i++) {
+ 							g.drawLine((int)draw.get(i).getX(),(int)draw.get(i).getY(), (int)draw.get(i).getX(),(int)draw.get(i).getY());
+ 						}
 					}
 					break;
 				

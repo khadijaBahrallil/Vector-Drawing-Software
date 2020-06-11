@@ -1,19 +1,82 @@
 package graphics.shapes.ui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import graphics.shapes.organize.Compose;
+import graphics.ui.Controller;
 
-public class PopupMenu {
 
+public class PopupMenu extends ControllerWithMenu {
+	
+	protected ShapesController c;
+
+	
+	public PopupMenu(Object model) {
+
+		super(model);
+	}
+	
+	
+
+	@Override
+	protected void initializeMenu() {
+		
+		
+		this.setPopup(new JPopupMenu());
+
+		
+		JMenu edit = new JMenu("Edit");
+		
+		this.addMenuItem(getPopup(), edit, null, null);
+		
+		JMenuItem split = new JMenuItem("Split");
+		ActionListener splitListener = new ActionListener()
+        {
+            
+            public void actionPerformed(ActionEvent action)
+            {
+            	c = (ShapesController) Controller.getView().getController();
+                c.split(	);
+            }
+        };
+	
+		
+		this.addSubMenuItem(edit, split, null, splitListener);
+		
+		JMenuItem join = new JMenuItem("Join");
+		ActionListener joinListener = new ActionListener()
+        {
+            
+            public void actionPerformed(ActionEvent action)
+            {
+            	c = (ShapesController) Controller.getView().getController();
+                c.join(	);
+            }
+        };
+	
+		
+		this.addSubMenuItem(edit, join, null, joinListener);
+		
+		JMenuItem resize = new JMenuItem("Resize");
+		ActionListener resizeListener = new ActionListener()
+        {
+            
+            public void actionPerformed(ActionEvent action)
+            {
+            	c = (ShapesController) Controller.getView().getController();
+                c.resize(	);
+            }
+        };
+	
+		
+		this.addSubMenuItem(edit, resize, null, resizeListener);
+		
+	}
+/*
 	JPopupMenu menu = new JPopupMenu();
 
 	private Compose c;
@@ -91,5 +154,6 @@ public class PopupMenu {
 		this.menu.show(e.getComponent(), e.getX(), e.getY());
 		return this.menu;
 	}
+	*/
 
 }

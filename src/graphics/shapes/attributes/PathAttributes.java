@@ -38,7 +38,8 @@ public class PathAttributes extends Attributes{
 	public enum Type {
 		  method_Points,
 		  method_Lines,
-		  method_Interpolation;	
+		  method_Interpolation,
+		  method_Test;	
 		}
 
 }

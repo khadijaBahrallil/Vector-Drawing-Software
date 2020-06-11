@@ -38,6 +38,9 @@ public abstract class Shape {
 	
 	public abstract void accept(ShapeVisitor sVisitor);
 	
+	public abstract void resize();
+
+	
 	public Shape clone() {
 		Shape newShape = null;
 		if (this instanceof SRectangle) {
@@ -68,7 +71,6 @@ public abstract class Shape {
 			Shape shape_n;
 			while (itr.hasNext()) {
 				shape_n = itr.next();
-				System.out.println(shape_n);
 				((SCollection) newShape).add(shape_n.clone());
 			}
 		}

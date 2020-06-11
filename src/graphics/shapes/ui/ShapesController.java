@@ -3,23 +3,32 @@ package graphics.shapes.ui;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 
-
+import graphics.shapes.SCircle;
 import graphics.shapes.SCollection;
 import graphics.shapes.Shape;
 import graphics.shapes.SPath;
+import graphics.shapes.SPolygon;
+import graphics.shapes.SRectangle;
+import graphics.shapes.SText;
 import graphics.shapes.attributes.PathAttributes;
 import graphics.shapes.attributes.SelectionAttributes;
 import graphics.ui.Controller;
 
+@SuppressWarnings("static-access")
+
 public class ShapesController extends Controller {
 	private Shape target;
 	private Point mouseStart;
+	private ArrayList<Shape> del;
 
 	public ShapesController(Object newModel) {
 		super(newModel);
 		this.target = null;
+		this.del = new ArrayList<Shape>();
+
 	}
 
 	public Shape getTarget() {
@@ -29,7 +38,7 @@ public class ShapesController extends Controller {
 		while (!targeted && itr.hasNext()) {
 			shape = itr.next();
 			Rectangle bounds = shape.getBounds();
-			targeted = bounds.contains(this.mouseStart); // Utilisation de la classe Rectangle java
+			targeted = bounds.contains(this.mouseStart);
 		}
 		if (targeted)
 			return shape;
@@ -43,7 +52,6 @@ public class ShapesController extends Controller {
 		while (itr.hasNext()) {
 			shape = itr.next();
 			if (shape != null && shape != target) {
-				// System.out.println("unselect all");
 				SelectionAttributes sA = (SelectionAttributes) shape.getAttributes("selectionAttributes");
 				if (sA != null)
 					sA.unselect();
@@ -67,7 +75,6 @@ public class ShapesController extends Controller {
 		}
 	}
 
-
 	public void mousePressed(MouseEvent e) {
 		mouseStart = new Point(e.getX(), e.getY());
 		try {
@@ -75,7 +82,7 @@ public class ShapesController extends Controller {
 		} catch (IndexOutOfBoundsException e1) {
 
 		}
-		
+
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -90,10 +97,6 @@ public class ShapesController extends Controller {
 			}
 		} else {
 			this.unselectAll();
-		}// If Right Click
-		if (e.getButton() == 3) {
-			PopupMenu rightClick = new PopupMenu(this); // Initialize a RightClight class Object
-			rightClick.pop(e); // Call its method
 		}
 		this.getView().repaint();
 	}
@@ -118,7 +121,6 @@ public class ShapesController extends Controller {
 			}
 		}
 
-		// if (((SCollection) model).getCollection().contains(this.target)) {
 		if (containsSelected) {
 			this.translateSelected(evt.getX(), evt.getY());
 			mouseStart.setLocation(evt.getX(), evt.getY());
@@ -136,7 +138,6 @@ public class ShapesController extends Controller {
 		}
 	}
 
-
 	public void mouseReleased(MouseEvent evt) {
 		Shape shape = null;
 		Iterator<Shape> itr = ((SCollection) model).iterator();
@@ -150,21 +151,7 @@ public class ShapesController extends Controller {
 		}
 
 	}
-	
 
-	public void delete() {
-		SCollection selectedShapes = this.getSelected(); // Cr�ation de la Collection des formes selectionn�es
-		Iterator<Shape> itr = selectedShapes.iterator(); // Crr�ation d'un it�rateur
-		Shape shape = null;
-		while (itr.hasNext()) { // On parcourt la collection
-			shape = itr.next(); // On it�re
-			if (shape != null) {
-				((SCollection) model).delete(shape);
-				System.out.println("Deleted");
-			}
-		}
-		this.getView().repaint(); // R�actualise
-	}
 	public SCollection getSelected() {
 		SCollection selectedShapes = new SCollection();
 		Shape shape = null;
@@ -180,8 +167,102 @@ public class ShapesController extends Controller {
 		}
 		return selectedShapes;
 	}
+
 	
+	public ArrayList<Shape> selected() {
+		ArrayList<Shape> shapes = new ArrayList<Shape>();
+		SCollection sc = (SCollection) this.getModel();
+		for (Iterator<Shape> it = sc.iterator(); it.hasNext();) {
+			Shape currentShape = it.next();
+			SelectionAttributes selectAtt = (SelectionAttributes) currentShape.getAttributes("selectionAttributes");
+			if (selectAtt != null) {
+				if (selectAtt.isSelected()) {
+					shapes.add(currentShape);
+				}
+			}
+		}
+		return shapes;
+	}
+
+	public void delete() {
+		SCollection toDelete = getSelected();
+		if (!selected().isEmpty())
+			del.clear();
+		for (Iterator<Shape> it = toDelete.iterator(); it.hasNext();) {
+			Shape currentShape = it.next();
+			this.del.add(currentShape);
+			((SCollection) (this.getModel())).remove(currentShape);
+			this.getView().repaint();
+		}
+		unselectAll();
+	}
+
+	public void clear() {
+		ArrayList<Shape> toClear = selected();
+		for (Shape shape : toClear) {
+			((SCollection) (this.getModel())).remove(shape);
+		}
+	}
+
 	
-	
+
+	public void split() {
+		SCollection model = (SCollection) this.getModel();
+		for (Shape col : selected()) {
+			if (col instanceof SCollection) {
+				for (Shape currentShape : ((SCollection) col).getCollection()) {
+					Shape s = currentShape.clone();
+					model.add(s);
+				}
+				delete();
+				del.clear();
+				getView().repaint();
+			}
+		}
+	}
+
+	public void join() {
+		SCollection toJoin = getSelected();
+		SCollection model = (SCollection) this.getModel();
+		SCollection sc = new SCollection();
+		for (Iterator<Shape> it = toJoin.iterator(); it.hasNext();) {
+			Shape currentShape = it.next();
+			sc.add(currentShape.clone());
+		}
+		delete();
+		del.clear();
+		model.add(sc);
+		getView().repaint();
+	}
+
+	public void resize() {
+		ArrayList<Shape> toResize = selected();
+		for (Shape s : toResize) {
+			if (s instanceof SRectangle) {
+				((SRectangle) s).resize();
+			} else if (s instanceof SCircle) {
+				((SCircle) s).resize();
+			} else if (s instanceof SText) {
+				((SText) s).resize();
+			} else if (s instanceof SPolygon) {
+				((SPolygon) s).resize();
+			} else if (s instanceof SCollection) {
+				((SCollection) s).resize(s);
+				getView().repaint();
+			}
+		}
+		getView().repaint();
+	}
+
+	public void selectAll() {
+		Shape s;
+		SCollection sc = (SCollection) this.getModel();
+		for (Iterator<Shape> i = sc.iterator(); i.hasNext();) {
+			s = (Shape) i.next();
+			SelectionAttributes sa = new SelectionAttributes();
+			sa.select();
+			s.addAttributes(sa);
+		}
+	}
 
 }
