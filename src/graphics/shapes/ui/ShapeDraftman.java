@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -170,39 +171,34 @@ public class ShapeDraftman implements ShapeVisitor {
 	}
 
 	@Override
-	public void visitPolygon (SPolygon spolygone) {
-			Graphics2D g2d = (Graphics2D) g.create();
-			if (spolygone != null) {
-				int sX = spolygone.getBounds().x;
-				int sY = spolygone.getBounds().y;
-				int sW = spolygone.getBounds().width;
-				int sH = spolygone.getBounds().height;
-
-				g2d.translate(sX + sW / 2, sY + sH / 2);
-				g2d.scale(spolygone.getScale(), spolygone.getScale());
-				g2d.translate(-sX - sW / 2, -sY - sH / 2);
-
-				ColorAttributes cA = (ColorAttributes) spolygone.getAttributes("colorAttributes");
-				if (cA != null) {
-					if (cA.filled()) {
-						g2d.setColor(cA.filledColor());
-						g2d.fillPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
-					}
-					if (cA.stroked()) {
-						g2d.setColor(cA.strokedColor());
-						g2d.drawPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
-					}
-				} else {
-					g2d.setColor(Color.BLACK);
-					g2d.drawPolygon(spolygone.getX(), spolygone.getY(), spolygone.getPoints().length);
-				}
-
-				SelectionAttributes sA = (SelectionAttributes) spolygone.getAttributes("selectionAttributes");
-				if (sA != null && sA.isSelected()) {
-					drawSelectionShape(spolygone.getBounds());
-				}
-
+	public void visitPolygon (SPolygon poly) {
+		if (poly != null) {
+			Polygon polygon = new Polygon();
+			for (Point point : poly.getPoints()) {
+				polygon.addPoint((int) point.getX(), (int) point.getY());
 			}
+
+			ColorAttributes cA = (ColorAttributes) poly.getAttributes("colorAttributes");
+			if (cA != null) {
+				if (cA.filled()) {
+					g.setColor(cA.filledColor());
+					g.fillPolygon(polygon);
+				}
+				if (cA.stroked()) {
+					g.setColor(cA.strokedColor());
+					g.drawPolygon(polygon);
+				}
+			} else {
+				g.setColor(Color.BLACK);
+				g.fillPolygon(polygon);
+			}
+
+			SelectionAttributes sA = (SelectionAttributes) poly.getAttributes("selectionAttributes");
+			if (sA != null && sA.isSelected()) {
+				drawSelectionShape(poly.getBounds());
+			}
+		}
+
 
 	}
 
